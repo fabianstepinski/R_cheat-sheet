@@ -121,6 +121,27 @@ sum(number_of_sixes >= 7)/nrow(mat)
 for (i in 1:10){
   print(sample(x = c("r", "g", "b", "o"), size = 2, replace = FALSE))}
 
+#FACTORS & LEVELS___________________________________________________________####
+
+#factor()
+#factors are used to store categorical variables
+blood_types <-  c("B", "AB", "O", "A", "O", "O", "A", "B")
+blood_types_factor <-  factor(blood_types) #scans through vector and identifies different categories
+blood_types_factor #R sorts the charachter values alphabetically
+str(blood_types_factor)#R encodes factors as integers, to save memory in case of long strings
+blood_types_factor <-  factor(blood_types, #levels argument can be defined
+                              levels = c("O", "A", "B", "AB")) #r encoding is now different
+#nominal vs. ordinal factors
+#nominal = no inherent/meaningful order
+blood_types_factor[1] < blood_types_factor[2] #throws an ERROR because factor is nominal
+#ordinal = meaningful/natural order
+tshirt <- c("M", "L", "S", "S", "L", "M", "L", "M")
+tshirt_factor <- factor(tshirt, ordered = T,
+                        levels = c("S", "M", "L"),
+                        labels = c("size_S", "size_M", "size_L")) #names the factor levels, order important!
+tshirt_factor #< signs now that this is an ordered factor
+tshirt_factor[1] < tshirt_factor[2] #evaluates TRUE because factor is ordinal
+
 #MISCELLANEOUS______________________________________________________________####
 
 #check the time for used for code
