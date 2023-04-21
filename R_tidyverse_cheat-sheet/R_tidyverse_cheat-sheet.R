@@ -22,7 +22,16 @@ library(tidyr)
 #load data frames####
 
 #INSERT read_csv(FILE_PATH)
-mtv_df <- bind_rows(
+getwd() #gets the current working directory
+setwd("C:/prog/R_cheat-sheets/R_tidyverse_cheat-sheet") #needs to be set to current wd
+
+#import csv files
+mtv_1 <- read_csv("MTV 1.csv") #header = TRUE ensures that R knows about the column names
+mtv_2 <- read_csv("MTV 2.csv")
+mtv_3 <- read_csv("MTV 3.csv")
+mtv_4 <- read_csv("MTV 4.csv")
+
+mtv_df <- bind_rows( #combines the imported dfs to one
   mtv_1,
   mtv_2,
   mtv_3,
@@ -105,7 +114,7 @@ charts_taylor_or_drake %>%
   distinct(song) %>%
   .$song #.$ creates vector
 
-#grouping(), summarise(), and arrange()####
+#grouping()/summarise()/arrange()####
 charts_taylor_or_drake %>%
   filter(is_drake == TRUE) %>%
   group_by(song, artist) %>%
@@ -284,7 +293,7 @@ starwars %>% #filter for only NAs
 #switch levels
 starwars$gender %>%
   levels() #shows the levels of the varible
-__ __ starwars$gender %>%
+starwars$gender %>%
   factor(levels = c("masculine", 
                     "feminine")) -> starwars$gender #switches levels around
 
@@ -296,3 +305,37 @@ unique(starwars$gender) #tells the different values the varible has
 #factor type####
 starwars$gender <- as.factor(starwars$gender) #gender is now a factor variable
 glimpse(starwars$gender)
+
+#JOINS______________________________________________________________________####
+
+#create example dfs, picture: join_dfs.png
+data_1 <- data.frame(ID = 1:2,
+                     x_1 = c("a_1", "a_2"),
+                     stringsAsFactors = FALSE) #determines how character vectors should be treated. F = stay as characters and do not convert to factors
+data_2 <- data.frame(ID = 2:3,
+                     x_2 = c("b_1", "b_2"),
+                     stringsAsFactors = FALSE)
+
+#mutating joins####
+#inner_join
+inner_join(data_1, data_2, by = "ID") %>% #by = defines the join argument column. Similar to SQL
+  View()
+#left_join/right_join
+#these joins can create NAs
+left_join(data_1, data_2, by = "ID") %>% #joins with using all rows form data_1, and the matching from data_2
+  View()
+right_join(data_1, data_2, by = "ID") %>% #similar to left join
+  View()
+#full_join
+#this join cna create NAs
+full_join(data_1, data_2, by = "ID") %>% #joins all 
+  View()
+
+#filter joins####
+#only retains certain rows
+#semi_joins
+semi_join(data_1, data_2, by = "ID") %>% #data_2 is used as filter. ID = 1 gets deleted since it's not in data_2
+  View()
+#anti_join
+anti_join(data_1, data_2, by = "ID") %>% #similar to semi_joins but keeps the rows which are not in data_2
+  View()
