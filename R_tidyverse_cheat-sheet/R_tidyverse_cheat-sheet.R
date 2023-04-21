@@ -20,8 +20,6 @@ library(lubridate)
 library(tidyr)
 
 #load data frames####
-
-#INSERT read_csv(FILE_PATH)
 getwd() #gets the current working directory
 setwd("C:/prog/R_cheat-sheets/R_tidyverse_cheat-sheet") #needs to be set to current wd
 
@@ -40,7 +38,6 @@ mtv_df_lower <- mtv_df %>%
   mutate(
     across(
       .cols = where(is.character), tolower))
-
 
 #ESSENTIALS_________________________________________________________________####
 
