@@ -116,10 +116,69 @@ head(mat) #look at the structure of matrix
 number_of_sixes <- apply(mat, 1, function(x){sum(x == 6)})
 sum(number_of_sixes >= 7)/nrow(mat)
 
-
 #for loop: Draw two spheres out of 4 without replacing them, repeat 10x
 for (i in 1:10){
   print(sample(x = c("r", "g", "b", "o"), size = 2, replace = FALSE))}
+
+#binomial distribution
+#example: historically have 68.4% of the student passed a certain class
+k <- 15 #what is the probability that 15 will pass?
+n <- 20 #given we have 20 students this semester
+p <- 0.684
+dbinom(x = k, size = n, prob = p)
+#distribution of all possible values the bernoulli random variable X can take
+k <- 0:20
+pk <- dbinom(k, 20, 0.684)
+plot(k, pk, type = "h",
+     main = "Bin(n = 20, p = 0.684)")
+#for p = 5 or as n grows: symmetrical graph
+#rule of thumb: if np(1-p) > 10, symmetrical Bin(n,p)
+
+#binomial distribution: cumulative distribution function
+#example: what's the probability that 4 or less students pass the class? P(X<=3)
+pbinom(4, 20, 0.684)
+#example: what's the probability that 15 or more students pass the class? P(X>=15)
+sum(dbinom(16:20, 20, 0.684))
+1 - pbinom(15, 20, 0.684) #same resultas above: P(X>15) = 1-P(X<=15)
+#example: what's the probability that between 13 and 16 students pass the class? P(13<=X<=16)
+sum(dbinom(13:16, 20, 0.684))
+
+#binomial distribution: quantiles
+#example: 90%-quantile to pass class: what's the maximum of students passing in 90% of the cases?
+alpha <- 0.9 #alpha-quantiles: P(X<=x)>=alpha
+qbinom(alpha, 20, 0.684)
+
+#binomial distribution: simulation
+#example: simulate a semester outcome for the class
+set.seed(4)
+rbinom(n = 1, 20, 0.684) #13 students have passed the class
+
+#geometrical distribution
+#example: what's the probability of getting a 5 with a d6 after the 4 throw? (3 fails followed by 1 success)
+dgeom(3, prob = 1/6) #ATTENTION: first argument in the function is the count of fails!
+
+#geometrical distribution: cumulative distribution function
+#example: what's the probability of having 3 or less fails while trying to roll a 5 with a d6?
+pgeom(3, 1/6) #P(X<=3)
+#example: what's the probability of rolling more than 3 fails?
+1 - pgeom(3, 1/6) #P(X>3)
+
+#geometrical distribution: quantiles
+#example: what's the maximum of fails we are going to see in 90% of the cases?
+qgeom(0.9, 1/6)
+
+#geometrical distribution
+#example: simulate fails given a probability
+set.seed(4)
+rgeom(1, 1/6) #in this case we rolled a five with the first try
+
+#negative binomial distribution
+dnbinom(x = , size = r, prob = p) #probability function
+pnbinom(x = , size = r, prob = p) #cummulative probability function
+qnbinom(x = , size = r, prob = p) #quantile function
+rnbinom(x = , size = r, prob = p) #random number
+#example: number of fails X until the third win at a lottery with p = 0.05. what's the maximum of tickets one needs to buy in 99% of the cases?
+qnbinom(0.99, 3, 0.05) + 3
 
 #FACTORS & LEVELS___________________________________________________________####
 
@@ -127,7 +186,7 @@ for (i in 1:10){
 #factors are used to store categorical variables
 blood_types <-  c("B", "AB", "O", "A", "O", "O", "A", "B")
 blood_types_factor <-  factor(blood_types) #scans through vector and identifies different categories
-blood_types_factor #R sorts the charachter values alphabetically
+blood_types_factor #R sorts the character values alphabetically
 str(blood_types_factor)#R encodes factors as integers, to save memory in case of long strings
 blood_types_factor <-  factor(blood_types, #levels argument can be defined
                               levels = c("O", "A", "B", "AB")) #r encoding is now different
