@@ -145,7 +145,7 @@ sum(dbinom(13:16, 20, 0.684))
 
 #binomial distribution: quantiles
 #example: 90%-quantile to pass class: what's the maximum of students passing in 90% of the cases?
-alpha <- 0.9 #alpha-quantiles: P(X<=x)>=alpha
+alpha <- 0.9 #alpha-quantiles: P(X <= x) >= alpha
 qbinom(alpha, 20, 0.684)
 
 #binomial distribution: simulation
@@ -173,12 +173,37 @@ set.seed(4)
 rgeom(1, 1/6) #in this case we rolled a five with the first try
 
 #negative binomial distribution
-dnbinom(x = , size = r, prob = p) #probability function
-pnbinom(x = , size = r, prob = p) #cummulative probability function
-qnbinom(x = , size = r, prob = p) #quantile function
-rnbinom(x = , size = r, prob = p) #random number
+x <- p <- q <- n <- 3
+r <- 3
+p <- 0.05
+dnbinom(x , size = r, prob = p) #probability function
+pnbinom(q , size = r, prob = p) #cummulative probability function
+qnbinom(p , size = r, prob = p) #quantile function
+rnbinom(n , size = r, prob = p) #random number
 #example: number of fails X until the third win at a lottery with p = 0.05. what's the maximum of tickets one needs to buy in 99% of the cases?
 qnbinom(0.99, 3, 0.05) + 3
+
+#hypergeometric distribution
+m <- n <- k <- x <- q <- p <- n <- 3 
+dhyper(x , m = m, n = n, k = k) # probability function
+phyper(q , m = m, n = n, k = k) # cummulative probability function
+qhyper(p , m = m, n = n, k = k) # quantile function
+rhyper(n , m = m, n = n, k = k) # random number
+#example: the number of broken screw in a sample is X ~ Hyp(27, 973, 30)
+#What's the probability that the sample only contains intact screws?
+dhyper(0, m = 27, n = 973, k = 30)
+
+#birthday problem
+#example: you ask n people about their birthday.
+#         how large does n need to be, so that the probability of someone sharing the same birthday as you is at least 0.5?
+#         assume the year has 365 days.
+#         P(A) = 1 - (364/365)^n
+n <- 1:1500
+PA <- 1 - (364/365)^n
+plot(n, PA,
+     type = "l", main = "probability of sharing birthday")
+n = ceiling(log(1-0.5)/log(364/365)) #solve PA for n first, then insert
+print(n)
 
 #FACTORS & LEVELS___________________________________________________________####
 
