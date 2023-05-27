@@ -1,10 +1,9 @@
 #R_general_cheat-sheet
 
-#Shortcuts
-#alt + minus = <-
-#ctrl + enter = execute selected part
+##Shortcuts
+- alt + minus = <-
+- ctrl + enter = execute selected part
 
-#BASIC_GRAPHING
 ```{r}
 #load basic R dataset
 library(datasets)
@@ -16,7 +15,10 @@ head(iris)
 ?iris
 ```
 
-#plotting
+---
+#BASIC_GRAPHING
+
+##plotting
 ```{r}
 plot(iris$Species) #plot categorical variable
 plot(iris$Petal.Length) #plot quantitative variable
@@ -25,7 +27,7 @@ plot(iris$Petal.Width, iris$Petal.Length) #quant x quant
 plot(iris) #matrix for holistic overview
 ```
 
-#plotting with options
+##plotting with options
 ```{r}
 plot(iris$Petal.Length, iris$Petal.Width,
      col = "#cc0000", #hex code for red
@@ -50,9 +52,10 @@ plot(dnorm, -pi, pi,
 plot(exp, 0, 8)
 ```
 
-#bar charts - simple is good
-#bar charts are the most simple graphics
-#for the most simple data
+##bar charts
+- simple is good
+- bar charts are the most simple graphics
+- for the most simple data
 
 ```{r}
 ?mtcars
@@ -64,16 +67,18 @@ cylinders <- table(mtcars$cyl) #create table and assign it to variable
 barplot(cylinders)
 ```
 
-#PROBABILITY________________________________________________________________####
+---
+#PROBABILITY
 
-#sample
+##sample
 ```{r}
 set.seed(4) #set seed to identify errors
 x <- sample(6, 1000, replace = TRUE) #draw randint out of 6, 1000x, with replacing
 barplot(table(x))
 ```
 
-#roll a d6 1000 times and assign 80% probability to the number 6
+##sample_example_1
+roll a d6 1000 times and assign 80% probability to the number 6
 ```{r}
 x <- sample(6, 1000, replace = TRUE, c(rep(0.2 / 5, 5),0.80))
 barplot(table(x),
@@ -86,7 +91,8 @@ for(i in 1:1000){
 }
 ```
 
-#graph the probabilities of the sum for a roll of two d6
+##sample_example_2
+graph the probabilities of the sum for a roll of two d6
 ```{r}
 p <- c(1:6, 5:1)/36
 plot(2:12, p, type = "h", las = 1, xlab = "sum of two die")
@@ -112,6 +118,8 @@ simulation_1 <- function(x){
 results_without_four <- sapply(1:experiment_amount, simulation_1)
 sum(results_without_four)/experiment_amount
 ```
+
+
 #what is the probability to get 7 or more sixes after 10 d6 rolls
 ```{r}
 n <- 100000 #experiment with 100000 rolls
@@ -230,7 +238,6 @@ rhyper(n , m = m, n = n, k = k) # random number
 dhyper(0, m = 27, n = 973, k = 30)
 ```
 
-
 #birthday problem
 ```{r}
 #example: you ask n people about their birthday.
@@ -245,7 +252,9 @@ n = ceiling(log(1-0.5)/log(364/365)) #solve PA for n first, then insert
 print(n)
 ```
 
+---
 #FACTORS & LEVELS
+
 ```{r}
 #factor()
 #factors are used to store categorical variables
