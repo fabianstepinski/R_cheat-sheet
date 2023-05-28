@@ -1,11 +1,13 @@
 #R_general_cheat-sheet
 
-##Shortcuts
+---
+##shortcuts
 - alt + minus = <-
 - ctrl + enter = execute selected part
 
-```{r}
+```{r basics}
 #load basic R dataset
+#install.packages("datasets")
 library(datasets)
 
 #look at the first few lines
@@ -16,10 +18,9 @@ head(iris)
 ```
 
 ---
-#BASIC_GRAPHING
+##basic_graphing
 
-##plotting
-```{r}
+```{r plotting}
 plot(iris$Species) #plot categorical variable
 plot(iris$Petal.Length) #plot quantitative variable
 plot(iris$Species, iris$Petal.Length) #cat x quant
@@ -27,37 +28,37 @@ plot(iris$Petal.Width, iris$Petal.Length) #quant x quant
 plot(iris) #matrix for holistic overview
 ```
 
-##plotting with options
-```{r}
+```{r plotting_with_options}
 plot(iris$Petal.Length, iris$Petal.Width,
      col = "#cc0000", #hex code for red
      main = "iris: pethal length vs. petal width", #header
      xlab = "petal length", #x axis lable
      ylab = "petal width" #y axis lable
-)
+     )
 
 #plot formulas
 plot(sin, 0, 2 * pi,
      lwd = 5, #line width
      col = "blue",
      main = "sine curve"
-)
+     )
+
 plot(dnorm, -pi, pi, 
      lwd = 10,
      main = "standard normal distribution",
      xlab = "z-scores",
      ylab = "density",
      col = "green"
-)
+     )
+
 plot(exp, 0, 8)
 ```
+```{r bar_charts}
+#bar charts
+#- simple is good
+#- bar charts are the most simple graphics
+#- for the most simple data
 
-##bar charts
-- simple is good
-- bar charts are the most simple graphics
-- for the most simple data
-
-```{r}
 ?mtcars
 head(mtcars)
 
@@ -68,22 +69,22 @@ barplot(cylinders)
 ```
 
 ---
-#PROBABILITY
+##probability
 
-##sample
-```{r}
+```{r sample_basics}
 set.seed(4) #set seed to identify errors
 x <- sample(6, 1000, replace = TRUE) #draw randint out of 6, 1000x, with replacing
 barplot(table(x))
 ```
 
-##sample_example_1
-roll a d6 1000 times and assign 80% probability to the number 6
-```{r}
+```{r sample_example_1}
+#roll a d6 1000 times and assign 80% probability to the number 6
+
 x <- sample(6, 1000, replace = TRUE, c(rep(0.2 / 5, 5),0.80))
 barplot(table(x),
         xlab = "Number",
         ylab = "Occurance")
+
 #same experiment, fill results into matrix
 mat <- matrix(NA, nrow = n, ncol = 2)
 for(i in 1:1000){
@@ -91,9 +92,9 @@ for(i in 1:1000){
 }
 ```
 
-##sample_example_2
-graph the probabilities of the sum for a roll of two d6
-```{r}
+```{r sample_example_2}
+#graph the probabilities of the sum for a roll of two d6
+
 p <- c(1:6, 5:1)/36
 plot(2:12, p, type = "h", las = 1, xlab = "sum of two die")
 
@@ -119,9 +120,9 @@ results_without_four <- sapply(1:experiment_amount, simulation_1)
 sum(results_without_four)/experiment_amount
 ```
 
-
+```{r sample_example_3}
 #what is the probability to get 7 or more sixes after 10 d6 rolls
-```{r}
+
 n <- 100000 #experiment with 100000 rolls
 y <- rep(NA, n)
 for(i in 1:n){
@@ -139,13 +140,16 @@ number_of_sixes <- apply(mat, 1, function(x){sum(x == 6)})
 sum(number_of_sixes >= 7)/nrow(mat)
 ```
 
+```{r sample_example_4}
 #for loop: Draw two spheres out of 4 without replacing them, repeat 10x
-```{r}
+
 for (i in 1:10){
   cat("draw #", i, ":", sample(x = c("r", "g", "b", "o"), size = 2, replace = FALSE), "\n")}
 ```
-#binomial distribution
-```{r}
+
+###binomial_distribution
+
+```{r binomial_distribution_example_1}
 #example: historically have 68.4% of the student passed a certain class
 k <- 15 #what is the probability that 15 will pass?
 n <- 20 #given we have 20 students this semester
@@ -153,7 +157,7 @@ p <- 0.684
 dbinom(x = k, size = n, prob = p)
 ```
 
-```{r}
+```{r dbinom}
 #distribution of all possible values the bernoulli random variable X can take
 k <- 0:20
 pk <- dbinom(k, 20, 0.684)
@@ -163,7 +167,7 @@ plot(k, pk, type = "h",
 #rule of thumb: if np(1-p) > 10, symmetrical Bin(n,p)
 ```
 
-```{r}
+```{r pbinom}
 #binomial distribution: cumulative distribution function
 #example: what's the probability that 4 or less students pass the class? P(X<=3)
 pbinom(4, 20, 0.684)
@@ -174,7 +178,7 @@ sum(dbinom(16:20, 20, 0.684))
 sum(dbinom(13:16, 20, 0.684))
 ```
 
-```{r}
+```{r qbinom}
 #binomial distribution: quantiles
 #example: 90%-quantile to pass class: what's the maximum of students passing in 90% of the cases?
 alpha <- 0.9 #alpha-quantiles: P(X <= x) >= alpha
@@ -186,13 +190,14 @@ set.seed(4)
 rbinom(n = 1, 20, 0.684) #13 students have passed the class
 ```
 
-#geometrical distribution
-```{r}
+###geometrical_distribution
+
+```{r dgeom}
 #example: what's the probability of getting a 5 with a d6 after the 4 throw? (3 fails followed by 1 success)
 dgeom(3, prob = 1/6) #ATTENTION: first argument in the function is the count of fails!
 ```
 
-```{r}
+```{r pgeom}
 #geometrical distribution: cumulative distribution function
 #example: what's the probability of having 3 or less fails while trying to roll a 5 with a d6?
 pgeom(3, 1/6) #P(X<=3)
@@ -200,21 +205,21 @@ pgeom(3, 1/6) #P(X<=3)
 1 - pgeom(3, 1/6) #P(X>3)
 ```
 
-```{r}
+```{r qgeom}
 #geometrical distribution: quantiles
 #example: what's the maximum of fails we are going to see in 90% of the cases?
 qgeom(0.9, 1/6)
 ```
 
-```{r}
+```{r rgeom}
 #geometrical distribution
 #example: simulate fails given a probability
 set.seed(4)
 rgeom(1, 1/6) #in this case we rolled a five with the first try
 ```
 
-#negative binomial distribution
-```{r}
+###other_distributions
+```{r negative_binomial_distribution}
 x <- p <- q <- n <- 3
 r <- 3
 p <- 0.05
@@ -226,8 +231,7 @@ rnbinom(n , size = r, prob = p) #random number
 qnbinom(0.99, 3, 0.05) + 3
 ```
 
-#hypergeometric distribution
-```{r}
+```{r hypergeometric_distribution}
 m <- n <- k <- x <- q <- p <- n <- 3 
 dhyper(x , m = m, n = n, k = k) # probability function
 phyper(q , m = m, n = n, k = k) # cummulative probability function
@@ -238,8 +242,7 @@ rhyper(n , m = m, n = n, k = k) # random number
 dhyper(0, m = 27, n = 973, k = 30)
 ```
 
-#birthday problem
-```{r}
+```{r birthday_problem}
 #example: you ask n people about their birthday.
 #         how large does n need to be, so that the probability of someone sharing the same birthday as you is at least 0.5?
 #         assume the year has 365 days.
@@ -253,9 +256,9 @@ print(n)
 ```
 
 ---
-#FACTORS & LEVELS
+##factors_and_levels
 
-```{r}
+```{r factors_example_1}
 #factor()
 #factors are used to store categorical variables
 blood_types <-  c("B", "AB", "O", "A", "O", "O", "A", "B")
@@ -266,8 +269,7 @@ blood_types_factor <-  factor(blood_types, #levels argument can be defined
                               levels = c("O", "A", "B", "AB")) #r encoding is now different
 ```
 
-```{r}
-#nominal vs. ordinal factors
+```{r nominal_vs_ordinal_factors}
 #nominal = no inherent/meaningful order
 blood_types_factor[1] < blood_types_factor[2] #throws an ERROR because factor is nominal
 #ordinal = meaningful/natural order
@@ -279,8 +281,10 @@ tshirt_factor #< signs now that this is an ordered factor
 tshirt_factor[1] < tshirt_factor[2] #evaluates TRUE because factor is ordinal
 ```
 
-#MISCELLANEOUS
-```{r}
+---
+##miscellaneous
+
+```{r system.time}
 #check the time for used for code
 n <- 50000
 system.time({
