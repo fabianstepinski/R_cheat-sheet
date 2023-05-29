@@ -285,19 +285,6 @@ sum(dpois(30:35, lambda = lambda))
 #how many client visits (less or equal) occure with a 10% probability within the next hour?
 qpois(p = 0.1, lambda = lambda)
 ```
-```{r poisson_distribution_example_2}
-Beispiele: Poisson oder Binomial?
-• Anzahl Wahlberechtigter, die bei einer Umfrage unter 5000 Personen eine
-Gesetzesvorlage befürworten.
-• Anzahl Schadensfälle einer Versicherung.
-• Anzahl Kunden, die einen Kredit beantragen.
-• Anzahl Fahrzeuge, die bei einer Kontrolle von 100 angehaltenen Fahrzeugen
-beanstandet werden müssen.
-
-#examples: poisson vs binomial
-#amount of eligible voters which are
-
-```
 
 #### hypergeometric_distribution
 
