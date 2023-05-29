@@ -1,3 +1,8 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
 #R_general_cheat-sheet
 
 ---
@@ -69,7 +74,12 @@ barplot(cylinders)
 ```
 
 ---
-##probability
+## probability
+
+---
+### discrete_distributions
+
+#### sample
 
 ```{r sample_basics}
 set.seed(4) #set seed to identify errors
@@ -100,6 +110,7 @@ plot(2:12, p, type = "h", las = 1, xlab = "sum of two die")
 
 #roll a dice 3 times. what is P("no 4")? - (5/6)^3 = 0.579
 sample(1:6, 3, T) #simulation of the question above
+
 #do the experiment x times and count the relative frequency of P("no four")
 experiment_amount <- c(100000)
 results_with_four <- c(0)
@@ -110,6 +121,7 @@ for(roll in 1:experiment_amount){
   }
 }
 1 - (results_with_four/experiment_amount)
+
 #same experiment
 experiment_amount <- c(100000)
 simulation_1 <- function(x){
@@ -121,7 +133,7 @@ sum(results_without_four)/experiment_amount
 ```
 
 ```{r sample_example_3}
-#what is the probability to get 7 or more sixes after 10 d6 rolls
+#what's the probability to get 7 or more sixes after 10 d6 roll?
 
 n <- 100000 #experiment with 100000 rolls
 y <- rep(NA, n)
@@ -131,6 +143,7 @@ for(i in 1:n){
   y[i] <- (count_sixes >= 7)
 }
 100*(sum(y)/n)
+
 #same experiment, with a matrix
 n <- 100000 #experiment with 100000 rolls
 w <- sample(1:6, 10 * n, T)
@@ -147,7 +160,7 @@ for (i in 1:10){
   cat("draw #", i, ":", sample(x = c("r", "g", "b", "o"), size = 2, replace = FALSE), "\n")}
 ```
 
-###binomial_distribution
+#### binomial_distribution
 
 ```{r binomial_distribution_example_1}
 #example: historically have 68.4% of the student passed a certain class
@@ -171,9 +184,11 @@ plot(k, pk, type = "h",
 #binomial distribution: cumulative distribution function
 #example: what's the probability that 4 or less students pass the class? P(X<=3)
 pbinom(4, 20, 0.684)
+
 #example: what's the probability that 15 or more students pass the class? P(X>=15)
 sum(dbinom(16:20, 20, 0.684))
-1 - pbinom(15, 20, 0.684) #same resultas above: P(X>15) = 1-P(X<=15)
+1 - pbinom(15, 20, 0.684) #same results above: P(X>15) = 1-P(X<=15)
+
 #example: what's the probability that between 13 and 16 students pass the class? P(13<=X<=16)
 sum(dbinom(13:16, 20, 0.684))
 ```
@@ -190,7 +205,7 @@ set.seed(4)
 rbinom(n = 1, 20, 0.684) #13 students have passed the class
 ```
 
-###geometrical_distribution
+#### geometrical_distribution
 
 ```{r dgeom}
 #example: what's the probability of getting a 5 with a d6 after the 4 throw? (3 fails followed by 1 success)
@@ -218,8 +233,18 @@ set.seed(4)
 rgeom(1, 1/6) #in this case we rolled a five with the first try
 ```
 
-###other_distributions
+#### negative_binomial_distribution
+
 ```{r negative_binomial_distribution}
+#bernoulli random trials with constant probability of success p untile r successes have occured
+#generalizes the geometrical distribution
+#X: amount of fails before r successes
+#E(X) = (1 - p)/p
+#Var(x) = (1 - p)/p**2
+#
+#notation: X ~ NBinom(r, p)
+
+#nbinom functions
 x <- p <- q <- n <- 3
 r <- 3
 p <- 0.05
@@ -227,26 +252,92 @@ dnbinom(x , size = r, prob = p) #probability function
 pnbinom(q , size = r, prob = p) #cummulative probability function
 qnbinom(p , size = r, prob = p) #quantile function
 rnbinom(n , size = r, prob = p) #random number
+
 #example: number of fails X until the third win at a lottery with p = 0.05. what's the maximum of tickets one needs to buy in 99% of the cases?
 qnbinom(0.99, 3, 0.05) + 3
 ```
 
+#### poisson_distribution
+
+```{r poisson_distribution}
+#Used in caseswhere events happen in a specific rate over a specific time range or place
+#Amount of occurances over the specified time rang or place
+#X: Amont of occurrences per time-unit/place
+#lambda: rate in which event over a specified time range or place occures
+#E(X) = lambda
+#Var(X) = lambda
+#X ~ Pois(lambda)
+```
+
+```{r poissnon_dstribution_example_1}
+# X = amount of clients at a bank per hour. On average, 32 client visits per hour: X ~ Pois(32)
+lambda = 32
+
+#what's the probability of exactly 30 client visits within the next hour?
+dpois(x = 30, lambda = lambda)
+
+#What's the probability of 30 or less client visits within the next hour?
+ppois(q = 30, lambda = lambda)
+
+#What's the probability of having between 30 ad 35 client vistis within the next hour?
+sum(dpois(30:35, lambda = lambda))
+
+#how many client visits (less or equal) occure with a 10% probability within the next hour?
+qpois(p = 0.1, lambda = lambda)
+```
+```{r poisson_distribution_example_2}
+Beispiele: Poisson oder Binomial?
+• Anzahl Wahlberechtigter, die bei einer Umfrage unter 5000 Personen eine
+Gesetzesvorlage befürworten.
+• Anzahl Schadensfälle einer Versicherung.
+• Anzahl Kunden, die einen Kredit beantragen.
+• Anzahl Fahrzeuge, die bei einer Kontrolle von 100 angehaltenen Fahrzeugen
+beanstandet werden müssen.
+
+#examples: poisson vs binomial
+#amount of eligible voters which are
+
+```
+
+#### hypergeometric_distribution
+
 ```{r hypergeometric_distribution}
+#X: amount of successes in k trials
+#E(x) = km / (m + n)
+#Var(x) = k(m / (m + n))(1 - m / (m + n))((n + n - k) / (m + n - 1))
+#X ~ Hyper(m, n, k)
+
+#Example: We draw k spheres out of a pot  with m white ones and n black ones, with replacement
+#X: amount of white spheres drawn
+
+#hyper functions
 m <- n <- k <- x <- q <- p <- n <- 3 
 dhyper(x , m = m, n = n, k = k) # probability function
 phyper(q , m = m, n = n, k = k) # cummulative probability function
 qhyper(p , m = m, n = n, k = k) # quantile function
 rhyper(n , m = m, n = n, k = k) # random number
-#example: the number of broken screw in a sample is X ~ Hyp(27, 973, 30)
+```
+
+```{r hypergeometric_distribution_example_1}
+#example: Out of 1000 screws, 27 are broken. At delivery, we control 30 at random
+
+#m = amount of broken screws = 27
+#n = amount of intact screws = 973
+#k = amount of screws in the control sample = 30
+
+#the number of broken screw in a sample is: X ~ Hyp(27, 973, 30)
+
+
 #What's the probability that the sample only contains intact screws?
 dhyper(0, m = 27, n = 973, k = 30)
 ```
+#### birthday_problem
 
 ```{r birthday_problem}
 #example: you ask n people about their birthday.
-#         how large does n need to be, so that the probability of someone sharing the same birthday as you is at least 0.5?
-#         assume the year has 365 days.
-#         P(A) = 1 - (364/365)^n
+#how large does n need to be, so that the probability of someone sharing the same birthday as you is at least 0.5?
+#assume the year has 365 days.
+#P(A) = 1 - (364/365)^n
 n <- 1:1500
 PA <- 1 - (364/365)^n
 plot(n, PA,
@@ -256,7 +347,55 @@ print(n)
 ```
 
 ---
-##factors_and_levels
+### continious_distributions
+
+```{r density_function_basics}
+#X can take on every value within a range
+#used where things are measured, exmples: length, weight, temperature, time
+#IMPORTANT: probability of specific values aren't possible to assign, only ranges: P(X = c) = 0 for c ∈ [min(X), max(X)], otherwise the sum of all possible outcomes would be ∞
+#the role o the probability function p(x) is taken by the density function fˇX(x)
+#the density function describes the distribution of infinitely many outcomes
+#IMPORTANT: fˇX(x) only describes distribution of the random variable X, the integral over a specified range does
+#fˇX(x) can be > 1, but can't < 0
+#proof that fˇX(x) is a density function:
+#1]fˇX(x) >= 0 for all values of x
+#2]fˇX(x) is partwise continious
+#3]#the area under fˇX(x) equals 1
+```
+
+```{r density_function_example_1}
+#X: length of a random leave found on the street is continiously distributed and obtains the following density function:
+f <- function(x){
+  if(x >= 0 & x <= 1){ #x ∈ [0, 1]
+    return(6 * x - 6 * x**2)
+  }else{ #x ∈ [(-∞, 0) U (1, ∞)]
+    return(0)
+  }
+}
+
+#plotting the density
+result <- list()
+steps <- list()
+for(i in -100:200){
+  current_input <- i/100
+  steps[[i + 101]] <- current_input
+  result[[i + 101]] <- f(x = current_input)
+  }
+plot(x = unlist(steps), y = unlist(result),
+     type = "l", col = "red", lwd = 2,
+     ylim = c(0, 1.5),
+     xlab = "x", ylab = "density", las = 1)
+```
+
+```{r cumulative_distribution_function_basics}
+#FˇX(x): prbability that random variable X takes on a value <= x
+#[FˇX(x)]d/dx = fˇX(x)
+#µ = E(X) = Area under x*fˇX(x)
+#Var(X) = E((X - E(X))**2)
+#sigma = sqrt(Var(X))
+```
+---
+## factors_and_levels
 
 ```{r factors_example_1}
 #factor()
@@ -282,7 +421,7 @@ tshirt_factor[1] < tshirt_factor[2] #evaluates TRUE because factor is ordinal
 ```
 
 ---
-##miscellaneous
+## miscellaneous
 
 ```{r system.time}
 #check the time for used for code
