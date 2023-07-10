@@ -285,6 +285,26 @@ sum(dpois(30:35, lambda = lambda))
 #how many client visits (less or equal) occure with a 10% probability within the next hour?
 qpois(p = 0.1, lambda = lambda)
 ```
+```{r poisson_distribution_example_2}
+#In 1898 Ladislaus von Borketwitsch documented the amounts of deaths in the preussian army caused by horse hoofbeats.He documented 10 Cavalery regiments over a time range of 20 years. There are n = 100 observtions (years):
+
+# amount    |   0    1    2    3    4  >=5 | total
+#--------------------------------------------------
+# occurance | 109   65   22    3    1    0 |   200
+
+
+#assume the amount of occurences a year are poisson distributed.
+
+#what are the parameters and what's the probability to observe a regiment with five or more deaths in a year?
+
+#1] find the rate of occurance for each year
+lambda = (109 / 200) * 0 + (65 / 200) * 1 + (22 / 200) * 2 + (3 / 200) * 3 + (1 / 200) * 4 + (0 / 200) * 5
+#lambda <- lambda / 10
+#X ~ Pois(lambda)
+
+1 - ppois(4, lambda = lambda)
+1 - sum(dpois(0:4, lambda = lambda))
+```
 
 #### hypergeometric_distribution
 
@@ -313,7 +333,6 @@ rhyper(n , m = m, n = n, k = k) # random number
 #k = amount of screws in the control sample = 30
 
 #the number of broken screw in a sample is: X ~ Hyp(27, 973, 30)
-
 
 #What's the probability that the sample only contains intact screws?
 dhyper(0, m = 27, n = 973, k = 30)
